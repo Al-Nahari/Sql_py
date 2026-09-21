@@ -1,79 +1,81 @@
-from app.database.schema import initialize_database
-from app.repositories.student_repository import StudentRepository
-from app.repositories.course_repository import CourseRepository
-from app.repositories.enrollment_repository import EnrollmentRepository
-from app.repositories.assessment_repository import AssessmentRepository
-from app.etl.pipeline import run_pipeline
+"""
+Entry point. Wires the Extract -> Validate -> Integrate -> Transform ->
+Final Validate -> Load pipeline together, following the structure
+requested in the assignment (section 16).
 
-def seed_demo_data(student_repo, course_repo, enrollment_repo, assessment_repo):
-    students = [
-        ("STU001", "Ahmed Ali", 21, "Computer Science", 3.45),
-        ("STU002", "Sara Mohammed", 22, "Artificial Intelligence", 3.82),
-        ("STU003", "Omar Hassan", 20, "Information Systems", 2.91),
-        ("STU004", "Noura Salem", 23, "Computer Science", 3.67),
-    ]
-    courses = [
-        ("CS101", "Python Programming", 3),
-        ("DB201", "Database Systems", 3),
-        ("DE301", "Data Engineering", 4),
-    ]
+Run with:
+    python main.py
+"""
 
-    for student in students:
-        try:
-            student_repo.create(*student)
-        except Exception:
-            pass
+from __future__ import annotations
 
-    for course in courses:
-        try:
-            course_repo.create(*course)
-        except Exception:
-            pass
+from app.sources.csv_source import extract_csv
+from app.sources.api_source import extract_api
+from app.sources.database_source import extract_database
+from app.transformation.cleaner import clean_csv, clean_api, clean_database
+from app.transformation.integration import integrate_data
+from app.transformation.transformer import transform_data
+from app.validation.quality import validate_sources, validate_final_data
+from app.output.csv_writer import save_processed_data, save_rejected_data
+from app.utils.config import load_config, resolve_path
+from app.utils.logger import get_logger
+from app.utils.metrics import PipelineMetrics
 
-    enrollments = [
-        ("STU001", "CS101"), ("STU001", "DB201"),
-        ("STU002", "CS101"), ("STU002", "DE301"),
-        ("STU003", "DB201"),
-        ("STU004", "CS101"), ("STU004", "DE301"),
-    ]
+logger = get_logger(__name__)
 
-    for student_id, course_code in enrollments:
-        try:
-            enrollment_id = enrollment_repo.create(
-                student_id, course_code, "2026-Fall"
-            )
-            assessment_repo.create(enrollment_id, "Midterm", 25, 22)
-            assessment_repo.create(enrollment_id, "Final", 50, 42)
-            assessment_repo.create(enrollment_id, "Assignment", 25, 23)
-        except Exception:
-            pass
 
-def main():
-    conn = initialize_database()
+def run_pipeline() -> PipelineMetrics:
+    config = load_config()
+    metrics = PipelineMetrics()
 
-    student_repo = StudentRepository(conn)
-    course_repo = CourseRepository(conn)
-    enrollment_repo = EnrollmentRepository(conn)
-    assessment_repo = AssessmentRepository(conn)
-
-    seed_demo_data(
-        student_repo, course_repo, enrollment_repo, assessment_repo
+    # ---------- Extract ----------
+    csv_data = extract_csv(resolve_path(config["paths"]["raw_csv"]))
+    api_data = extract_api(
+        host=config["api"]["host"],
+        port=config["api"]["port"],
+        path=config["api"]["path"],
+        timeout=config["api"]["timeout"],
+        retries=config["api"]["retries"],
+        retry_backoff_seconds=config["api"]["retry_backoff_seconds"],
     )
+    database_data = extract_database(resolve_path(config["paths"]["database"]))
 
-    # Demonstrate UPDATE.
-    student_repo.update("STU003", gpa=3.05)
+    metrics.csv_records = len(csv_data)
+    metrics.api_records = len(api_data)
+    metrics.database_records = len(database_data)
 
-    # Demonstrate DELETE using a temporary record.
-    course_repo.create("TMP999", "Temporary Course", 1)
-    course_repo.delete("TMP999")
+    # ---------- Validate (per-source sanity check) ----------
+    validate_sources(csv_data, api_data, database_data)
 
-    # Run ETL pipeline.
-    output_file = run_pipeline(conn)
+    # ---------- Clean ----------
+    csv_data = clean_csv(csv_data, metrics=metrics)
+    api_data = clean_api(api_data, metrics=metrics)
+    database_data = clean_database(database_data, metrics=metrics)
 
-    conn.close()
+    # ---------- Integrate ----------
+    integrated_data = integrate_data(csv_data, api_data, database_data)
+    metrics.integrated_records = len(integrated_data)
 
-    print("Application completed successfully.")
-    print(f"Processed CSV: {output_file}")
+    # ---------- Transform ----------
+    transformed_data = transform_data(integrated_data)
+
+    # ---------- Final Validation ----------
+    valid_data, rejected_data = validate_final_data(
+        transformed_data, config["validation"]
+    )
+    metrics.valid_records = len(valid_data)
+    metrics.rejected_records = len(rejected_data)
+
+    # ---------- Load ----------
+    save_processed_data(valid_data, resolve_path(config["paths"]["processed_output"]))
+    save_rejected_data(rejected_data, resolve_path(config["paths"]["rejected_output"]))
+
+    summary = metrics.as_summary_text()
+    logger.info("\n%s", summary)
+    print(summary)
+
+    return metrics
+
 
 if __name__ == "__main__":
-    main()
+    run_pipeline()

@@ -1,4 +1,10 @@
 __pycache__/
 *.pyc
 .venv/
+venv/
+
+# Generated at runtime by main.py - not part of the source
+data/processed/*.csv
+data/rejected/*.csv
+database/*.db
 logs/*.log

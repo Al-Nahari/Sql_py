@@ -1,0 +1,30 @@
+# ============================================================
+# Pipeline configuration
+# Centralizes file paths, the mock API address, and the data
+# quality thresholds so nothing is hard-coded inside main.py.
+# ============================================================
+
+paths:
+  raw_csv: data/raw/students.csv
+  database: database/students.db
+  processed_output: data/processed/final_dataset.csv
+  rejected_output: data/rejected/rejected_records.csv
+  log_file: logs/pipeline.log
+
+api:
+  host: 127.0.0.1
+  port: 8899
+  path: /students
+  timeout: 5
+  retries: 3
+  retry_backoff_seconds: 0.5
+
+validation:
+  age_min: 16
+  age_max: 80
+  gpa_min: 0
+  gpa_max: 4
+  attendance_min: 0
+  attendance_max: 100
+  score_min: 0
+  score_max: 100

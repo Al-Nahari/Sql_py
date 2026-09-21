@@ -1,29 +1,48 @@
+"""
+Central logging configuration for the whole pipeline.
+
+Every module calls get_logger(__name__) instead of configuring
+logging itself, so all stages write to the same logs/pipeline.log
+file with one consistent format.
+"""
+
+from __future__ import annotations
+
 import logging
-from pathlib import Path
+import os
 
-LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
-LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / "application.log"
+from app.utils.config import resolve_path
 
-def get_logger(name):
-    logger = logging.getLogger(name)
+_CONFIGURED = False
 
-    if not logger.handlers:
-        logger.setLevel(logging.INFO)
 
-        formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-        )
+def _configure_root_logger() -> None:
+    global _CONFIGURED
+    if _CONFIGURED:
+        return
 
-        file_handler = logging.FileHandler(
-            LOG_FILE, encoding="utf-8"
-        )
-        file_handler.setFormatter(formatter)
+    log_path = resolve_path("logs/pipeline.log")
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-        console_handler = logging.StreamHandler()
-        console_handler.setFormatter(formatter)
+    formatter = logging.Formatter(
+        fmt="%(asctime)s %(levelname)s %(name)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
+    file_handler = logging.FileHandler(log_path, mode="a", encoding="utf-8")
+    file_handler.setFormatter(formatter)
 
-    return logger
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    root.addHandler(file_handler)
+    root.addHandler(console_handler)
+
+    _CONFIGURED = True
+
+
+def get_logger(name: str) -> logging.Logger:
+    _configure_root_logger()
+    return logging.getLogger(name)
