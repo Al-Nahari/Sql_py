@@ -1,12 +1,4 @@
-"""
-Source #2: REST API containing academic data
-(student_id, gpa, attendance, status).
 
-Talks to a local mock API server over real HTTP using `requests`,
-so the full HTTP request/response/error-handling flow described in
-the assignment (Connection Error, Timeout, HTTP Error, Invalid JSON,
-Empty Response) is genuinely exercised, not simulated.
-"""
 
 from __future__ import annotations
 

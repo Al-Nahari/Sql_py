@@ -1,18 +1,3 @@
-"""
-A tiny local REST API used as the project's "external API" source.
-
-The assignment allows using a public API OR building a local Mock API
-when internet access is not guaranteed. To keep the project runnable
-anywhere with zero external dependencies, this module spins up a real
-HTTP server (stdlib only, no Flask) on 127.0.0.1 that serves student
-academic data as JSON. app/sources/api_source.py then talks to it with
-plain `requests` calls, exactly like it would talk to any real REST API.
-
-The response data intentionally includes a few bad records (an invalid
-GPA, an invalid attendance percentage, a missing GPA, and a student_id
-that does not exist in the CSV) so the validation stage has something
-real to catch.
-"""
 
 from __future__ import annotations
 

@@ -1,11 +1,6 @@
-"""Writes the final processed dataset and the rejected-records file."""
-
 from __future__ import annotations
-
 import os
-
 import pandas as pd
-
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
