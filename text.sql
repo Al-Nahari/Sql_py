@@ -79,5 +79,97 @@ with student_averages as (
 from assessments
   group by student_id
 )
-select student_id,average_score,rank() over(order by student_id desc )as student_rank from student_averages;
+select student_id,average_score,row_number() over(order by average_score desc )as student_rank from student_averages;
+
+
+select student_id, score , AVG(score) over (partition by student_id)
+
+
+WITH student_avg AS
+(
+SELECT
+s.student_id,
+s.full_name,
+s.city,
+AVG(a.score) AS average_score
+FROM students s
+JOIN assessments a
+ON s.student_id = a.student_id
+GROUP BY
+s.student_id,
+s.full_name,
+s.city
+)
+SELECT *
+FROM student_avg;
+
+########################################################333
+WITH student_avg AS
+(
+SELECT
+s.student_id,
+s.full_name,
+s.city,
+AVG(a.score) AS average_score
+FROM students s
+JOIN assessments a
+ON s.student_id = a.student_id
+GROUP BY
+s.student_id,
+s.full_name,
+s.city
+),
+course_counts AS
+(
+SELECT
+student_id,
+COUNT(DISTINCT course_id)
+study(# \r
+Query buffer reset (cleared).
+
+###############################################
+
+ WITH student_avg AS
+(
+SELECT
+s.student_id,
+s.full_name,
+s.city,
+AVG(a.score) AS average_score
+FROM students s
+JOIN assessments a
+ON s.student_id = a.student_id
+ GROUP BY
+s.student_id,
+s.full_name,
+s.city
+),
+course_counts AS
+(
+SELECT
+student_id,
+COUNT(DISTINCT course_id)
+AS courses_count
+FROM enrollments
+GROUP BY student_id
+),
+student_metrics AS (SELECT sa.student_id, sa.full_name, sa.city, sa.average_score, cc.courses_count FROM student_avg sa LEFT JOIN course_counts cc ON sa.student_id = cc.student_id),
+
+ranked_students AS  (SELECT *,RANK() OVER (ORDER BY average_score DESC) AS student_rank FROM student_metrics)
+
+SELECT
+*,
+CASE
+WHEN average_score >= 90
+THEN 'Excellent'
+WHEN average_score >= 80
+THEN 'Very Good'
+WHEN average_score >= 70
+THEN 'Good'
+WHEN average_score >= 60
+THEN 'Pass'
+ELSE 'Weak'
+END AS performance_level
+FROM ranked_students
+
 
