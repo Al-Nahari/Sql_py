@@ -173,3 +173,6 @@ END AS performance_level
 FROM ranked_students
 
 
+
+select s.student_id, s.full_name,c.course_name
+from students s,courses c;
