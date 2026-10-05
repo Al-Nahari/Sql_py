@@ -12,7 +12,10 @@ logger = get_logger(__name__)
 
 
 def validate_sources(
-    csv_df: pd.DataFrame, api_df: pd.DataFrame, database_df: pd.DataFrame
+    csv_df: pd.DataFrame,
+    api_df: pd.DataFrame,
+    database_df: pd.DataFrame,
+    mongodb_df: pd.DataFrame | None = None,
 ) -> dict:
     """Quick per-source health check, logged for visibility. Does not
     drop anything - final validation is where rejection happens.
@@ -26,6 +29,9 @@ def validate_sources(
         else 0,
         "database_missing_student_id": int(database_df["student_id"].isna().sum())
         if "student_id" in database_df.columns
+        else 0,
+        "mongodb_missing_student_id": int(mongodb_df["student_id"].isna().sum())
+        if mongodb_df is not None and "student_id" in mongodb_df.columns
         else 0,
     }
     logger.info("Source validation report: %s", report)

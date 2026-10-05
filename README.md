@@ -1,6 +1,6 @@
 # Student Data Pipeline — Multi-Source ETL
 
-مشروع Data Engineering يقوم ببناء **Data Integration & ETL Pipeline** يجمع بيانات الطلاب من ثلاثة مصادر مختلفة (CSV، REST API، SQLite)، ثم يقوم بالتحقق من جودتها وتنظيفها ودمجها وتحويلها، لينتج في النهاية Dataset موحد وجاهز للتحليل أو Machine Learning.
+مشروع Data Engineering يقوم ببناء **Data Integration & ETL Pipeline** يجمع بيانات الطلاب من أربعة مصادر (CSV، REST API، SQLite، MongoDB)، ثم يتحقق من جودتها وينظفها ويدمجها ويحوّلها إلى Dataset موحد.
 
 ## 1. Project Overview
 
@@ -11,8 +11,9 @@
 | **CSV File** | البيانات الأساسية للطالب (الاسم، العمر، التخصص، المدينة) | `pandas.read_csv` |
 | **REST API** | البيانات الأكاديمية (GPA، الحضور، الحالة) | `requests` عبر HTTP حقيقي إلى Mock API محلي |
 | **SQLite Database** | المقررات والتسجيلات والدرجات (`courses`, `enrollments`) | `sqlite3` مع JOIN |
+| **MongoDB** | سجلات طلاب إضافية | PyMongo من المجموعة `Uinveresity.nahari_source` |
 
-الناتج النهائي هو ملف واحد نظيف وموحد: `data/processed/final_dataset.csv`، بالإضافة إلى `data/rejected/rejected_records.csv` الذي يوثّق كل سجل تم رفضه وسبب الرفض.
+الناتج النهائي هو ملف CSV نظيف وموحد: `data/processed/final_dataset.csv`، ويُحفظ أيضًا في مجموعة MongoDB `Uinveresity.nahari`. مجموعة الإدخال منفصلة حتى لا تُقرأ نتائج التشغيل السابق مرة أخرى كمصدر.
 
 ## 2. Architecture
 
@@ -23,7 +24,8 @@ student_data_pipeline/
 │   ├── sources/            # Extract layer — مصدر واحد لكل ملف
 │   │   ├── csv_source.py
 │   │   ├── api_source.py
-│   │   └── database_source.py
+│   │   ├── database_source.py
+│   │   └── mongodb_source.py
 │   │
 │   ├── mock_api/            # خادم REST API محلي (بديل API خارجي)
 │   │   └── server.py
@@ -37,7 +39,8 @@ student_data_pipeline/
 │   │   └── quality.py       # Rules 1–7 + رفض السجلات غير الصالحة
 │   │
 │   ├── output/
-│   │   └── csv_writer.py    # Load: final_dataset.csv / rejected_records.csv
+│   │   ├── csv_writer.py    # Load: final_dataset.csv / rejected_records.csv
+│   │   └── mongo_writer.py  # Load: valid records into MongoDB
 │   │
 │   └── utils/
 │       ├── config.py        # قراءة config.yaml
@@ -74,14 +77,17 @@ student_data_pipeline/
 - `courses(course_id, course_name, credit_hours)`
 - `enrollments(student_id, course_id, semester, score)`
 
-يتم تجميع الدرجات عبر `student_id` (متوسط الدرجات وعدد المقررات) قبل الدمج مع المصدرين الآخرين، لأن كل طالب قد يكون مسجلاً في أكثر من مقرر.
+يتم تجميع الدرجات عبر `student_id` (متوسط الدرجات وعدد المقررات) قبل الدمج، لأن كل طالب قد يكون مسجلاً في أكثر من مقرر.
+
+### 3.4 MongoDB — `Uinveresity.nahari_source`
+تُقرأ مستندات الطلاب من مجموعة الإدخال `nahari_source`، مع تجاهل `_id` الداخلي. عند وجود `full_name` يُحوّل إلى `student_name`. مجموعة `nahari` مخصصة لحفظ الناتج النهائي فقط.
 
 ## 4. ETL Pipeline
 
 الترتيب الفعلي في `main.py::run_pipeline()`:
 
 ```
-Extract (CSV + API + SQLite)
+Extract (CSV + API + SQLite + MongoDB)
         │
         ▼
 Validate Sources  (فحص أولي سريع، تسجيل فقط)
@@ -99,14 +105,14 @@ Transform  (توحيد أسماء الأعمدة، تحويل الأنواع، �
 Final Validation  (Rules 1–7 → Valid / Rejected)
         │
         ▼
-Load  (final_dataset.csv + rejected_records.csv)
+Load  (final_dataset.csv + rejected_records.csv + MongoDB)
 ```
 
 - **Extract**: قراءة كل مصدر كما هو دون أي تعديل على المحتوى.
 - **Transform**: توحيد الأعمدة (`Student ID` → `student_id`)، تحويل الأنواع، وإنشاء عمودين مشتقين: `performance_level` (من GPA) و`attendance_status` (من نسبة الحضور).
 - **Validate**: تطبيق قواعد الجودة والفصل بين السجلات الصالحة والمرفوضة.
-- **Integrate**: `outer merge` على `student_id` حتى لا يُفقد أي سجل من أي مصدر، مع عمود `source` يوثّق من أي مصدر/مصادر جاء كل سجل (Data Lineage).
-- **Load**: كتابة الناتج النهائي والسجلات المرفوضة كملفات CSV منفصلة.
+- **Integrate**: `outer merge` على `student_id` حتى لا يُفقد أي سجل من أي مصدر، مع عمود `source` يسجل المصادر التي يوجد فيها سجل الطالب فعليًا (`CSV`, `API`, `DATABASE`, `MONGODB`). قد يحتوي الصف على أكثر من مصدر إذا وُجد في أكثر من مجموعة بيانات.
+- **Load**: كتابة الناتج النهائي والسجلات المرفوضة كملفات CSV منفصلة، مع تحديث سجلات الطلاب الصالحة في MongoDB حسب `student_id` لتجنب تكرارها عند إعادة تشغيل الـ Pipeline.
 
 ## 5. Data Quality
 
@@ -136,7 +142,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-عند التشغيل الأول، سيقوم البرنامج تلقائيًا بـ: إنشاء `database/students.db` وتعبئته، تشغيل خادم الـ Mock API محليًا، وتنفيذ الـ Pipeline كاملًا، ثم طباعة ملخص التنفيذ (Pipeline Execution Summary).
+يقرأ البرنامج MongoDB من `Uinveresity.nahari_source` ويكتب النتائج الصالحة إلى `Uinveresity.nahari`. يجب أن يعمل MongoDB محليًا وأن تُضاف سجلات الإدخال إلى مجموعة `nahari_source`. يمكن تغيير المجموعتين أو تعطيل القراءة والكتابة كلٌّ على حدة عبر `read_enabled` و`enabled` في قسم `mongodb` داخل `config.yaml`.
 
 ## 8. Output
 
@@ -144,6 +150,7 @@ python main.py
 |---|---|
 | `data/processed/final_dataset.csv` | Dataset النهائي الموحد والنظيف، جاهز للتحليل أو ML |
 | `data/rejected/rejected_records.csv` | السجلات المرفوضة مع `error_reason` |
+| MongoDB `Uinveresity.nahari` | الوجهة: السجلات الصالحة، يتم تحديثها باستخدام `student_id` |
 | `logs/pipeline.log` | سجل تفصيلي لكل مرحلة من مراحل الـ Pipeline |
 
 ## Testing
@@ -157,8 +164,9 @@ python -m unittest discover -s tests -v
 ## Bonus Features (متطلبات التميز)
 
 - **Pipeline Configuration**: جميع المسارات وعتبات التحقق موجودة في `config.yaml` بدلًا من ترميزها داخل الكود.
-- **Data Lineage**: عمود `source` في الناتج النهائي يوضح أي المصادر (CSV/API/DATABASE) ساهم في كل سجل.
+- **Data Lineage**: عمود `source` في الناتج النهائي يوضح أي المصادر (CSV/API/DATABASE/MONGODB) احتوت سجل الطالب فعليًا.
 - **Pipeline Metrics**: ملخص تنفيذي (`PIPELINE EXECUTION SUMMARY`) يُطبع ويُسجَّل في نهاية كل تشغيل، يتضمن عدد السجلات من كل مصدر، عدد الصالحة والمرفوضة والمكررة، ووقت التنفيذ.
+- **MongoDB Input/Output**: قراءة البيانات الخام من `nahari_source` وحفظ السجلات الصالحة في `nahari` باستخدام upsert على `student_id`.
 - **Reusable Architecture**: إضافة مصدر جديد (Excel/MongoDB/PostgreSQL...) تتطلب فقط ملف جديد في `app/sources/` يُعيد `DataFrame`، دون أي تعديل على طبقات التنظيف أو التحقق أو الدمج.
 
 ---

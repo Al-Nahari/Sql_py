@@ -14,6 +14,7 @@ class PipelineMetrics:
     csv_records: int = 0
     api_records: int = 0
     database_records: int = 0
+    mongodb_records: int = 0
     integrated_records: int = 0
     valid_records: int = 0
     rejected_records: int = 0
@@ -34,6 +35,7 @@ class PipelineMetrics:
             f"CSV Records        : {self.csv_records}",
             f"API Records        : {self.api_records}",
             f"Database Records   : {self.database_records}",
+            f"MongoDB Records    : {self.mongodb_records}",
             "",
             f"Integrated Records : {self.integrated_records}",
             "",
