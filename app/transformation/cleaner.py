@@ -49,6 +49,11 @@ def clean_csv(df: pd.DataFrame, metrics=None) -> pd.DataFrame:
     return df
 
 
+def clean_mongodb(df: pd.DataFrame, metrics=None) -> pd.DataFrame:
+    """Clean MongoDB student roster records using the CSV roster rules."""
+    return clean_csv(df, metrics=metrics)
+
+
 def clean_api(df: pd.DataFrame, metrics=None) -> pd.DataFrame:
     df = df.copy()
 

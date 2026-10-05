@@ -29,7 +29,25 @@ def extract_mongodb(
         logger.info("MongoDB records: 0")
         return pd.DataFrame(columns=["student_id"])
 
-    data = pd.DataFrame(records).drop(columns="_id", errors="ignore")
+    student_records = []
+    for record in records:
+        nested_students = record.get("students")
+        if isinstance(nested_students, list):
+            student_records.extend(
+                student for student in nested_students if isinstance(student, dict)
+            )
+        elif "student_id" in record:
+            student_records.append(record)
+
+    if not student_records:
+        logger.warning(
+            "MongoDB collection %s.%s contains documents but no student records",
+            database_name,
+            collection_name,
+        )
+        return pd.DataFrame(columns=["student_id"])
+
+    data = pd.DataFrame(student_records).drop(columns="_id", errors="ignore")
     if "full_name" in data.columns and "student_name" not in data.columns:
         data = data.rename(columns={"full_name": "student_name"})
 

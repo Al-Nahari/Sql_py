@@ -16,11 +16,9 @@ api:
 mongodb:
   uri: mongodb://localhost:27017/
   database: Uinveresity
-  source_collection: nahari_source
-  collection: nahari
+  source_collection: nahari
   server_selection_timeout_ms: 5000
   read_enabled: true
-  enabled: true
 
 validation:
   age_min: 16

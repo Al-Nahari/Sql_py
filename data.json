@@ -1,406 +1,82 @@
 {
-    
-      "instructors": [
-        {
-          "instructor_id": 1,
-          "full_name": "Dr. Lina Nasser",
-          "department": "Computer Science",
-          "email": "lina.nasser@university.edu"
-        },
-        {
-          "instructor_id": 2,
-          "full_name": "Dr. Youssef Karim",
-          "department": "Information Technology",
-          "email": "youssef.karim@university.edu"
-        },
-        {
-          "instructor_id": 3,
-          "full_name": "Dr. Mariam Fadel",
-          "department": "Computer Science",
-          "email": "mariam.fadel@university.edu"
-        },
-        {
-          "instructor_id": 4,
-          "full_name": "Dr. Tarek Mansour",
-          "department": "Information Systems",
-          "email": "tarek.mansour@university.edu"
-        }
-      ]
-    ,
-    
-      "students": [
-        {
-          "student_id": 1001,
-          "full_name": "Rami Haddad",
-          "gender": "Male",
-          "date_of_birth": "2002-08-23",
-          "city": "Aden"
-        },
-        {
-          "student_id": 1002,
-          "full_name": "Dina Salem",
-          "gender": "Female",
-          "date_of_birth": "2003-06-12",
-          "city": "Mukalla"
-        },
-        {
-          "student_id": 1003,
-          "full_name": "Faris Qasim",
-          "gender": "Male",
-          "date_of_birth": "2004-03-05",
-          "city": "Hodeidah"
-        },
-        {
-          "student_id": 1004,
-          "full_name": "Layla Omar",
-          "gender": "Female",
-          "date_of_birth": "2002-12-17",
-          "city": "Taiz"
-        },
-        {
-          "student_id": 1005,
-          "full_name": "Nabil Farouk",
-          "gender": "Male",
-          "date_of_birth": "2003-10-29",
-          "city": "Aden"
-        },
-        {
-          "student_id": 1006,
-          "full_name": "Salma Jaber",
-          "gender": "Female",
-          "date_of_birth": "2004-05-14",
-          "city": "Ibb"
-        },
-        {
-          "student_id": 1007,
-          "full_name": "Zaid Naji",
-          "gender": "Male",
-          "date_of_birth": "2003-02-08",
-          "city": "Dhamar"
-        },
-        {
-          "student_id": 1008,
-          "full_name": "Hana Yasin",
-          "gender": "Female",
-          "date_of_birth": "2002-09-30",
-          "city": "Sanaa"
-        }
-      ]
-    ,
-    
-      "courses": [
-        {
-          "course_id": 101,
-          "course_name": "Software Engineering",
-          "credit_hours": 3,
-          "instructor_id": 1
-        },
-        {
-          "course_id": 102,
-          "course_name": "Computer Networks",
-          "credit_hours": 3,
-          "instructor_id": 2
-        },
-        {
-          "course_id": 103,
-          "course_name": "Operating Systems",
-          "credit_hours": 3,
-          "instructor_id": 3
-        },
-        {
-          "course_id": 104,
-          "course_name": "Mobile Application Design",
-          "credit_hours": 3,
-          "instructor_id": 4
-        },
-        {
-          "course_id": 105,
-          "course_name": "Machine Learning",
-          "credit_hours": 4,
-          "instructor_id": 1
-        }
-      ]
-    ,
-    
-      "enrollments": [
-        {
-          "enrollment_id": 1,
-          "student_id": 1001,
-          "course_id": 101,
-          "enrollment_date": "2026-02-02",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 2,
-          "student_id": 1001,
-          "course_id": 102,
-          "enrollment_date": "2026-02-02",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 3,
-          "student_id": 1002,
-          "course_id": 101,
-          "enrollment_date": "2026-02-03",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 4,
-          "student_id": 1002,
-          "course_id": 105,
-          "enrollment_date": "2026-02-03",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 5,
-          "student_id": 1003,
-          "course_id": 103,
-          "enrollment_date": "2026-02-04",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 6,
-          "student_id": 1003,
-          "course_id": 102,
-          "enrollment_date": "2026-02-04",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 7,
-          "student_id": 1004,
-          "course_id": 104,
-          "enrollment_date": "2026-02-05",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 8,
-          "student_id": 1004,
-          "course_id": 105,
-          "enrollment_date": "2026-02-05",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 9,
-          "student_id": 1005,
-          "course_id": 101,
-          "enrollment_date": "2026-02-06",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 10,
-          "student_id": 1005,
-          "course_id": 102,
-          "enrollment_date": "2026-02-06",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 11,
-          "student_id": 1006,
-          "course_id": 103,
-          "enrollment_date": "2026-02-07",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 12,
-          "student_id": 1007,
-          "course_id": 104,
-          "enrollment_date": "2026-02-08",
-          "semester": "Spring 2026"
-        },
-        {
-          "enrollment_id": 13,
-          "student_id": 1008,
-          "course_id": 105,
-          "enrollment_date": "2026-02-08",
-          "semester": "Spring 2026"
-        }
-      ]
-    ,
-    
-     
-      "assessments": [
-        {
-          "assessment_id": 1,
-          "student_id": 1001,
-          "course_id": 101,
-          "assessment_type": "Midterm",
-          "score": 78.0
-        },
-        {
-          "assessment_id": 2,
-          "student_id": 1001,
-          "course_id": 101,
-          "assessment_type": "Final",
-          "score": 86.0
-        },
-        {
-          "assessment_id": 3,
-          "student_id": 1001,
-          "course_id": 102,
-          "assessment_type": "Midterm",
-          "score": 81.0
-        },
-        {
-          "assessment_id": 4,
-          "student_id": 1001,
-          "course_id": 102,
-          "assessment_type": "Final",
-          "score": 88.0
-        },
-        {
-          "assessment_id": 5,
-          "student_id": 1002,
-          "course_id": 101,
-          "assessment_type": "Midterm",
-          "score": 91.0
-        },
-        {
-          "assessment_id": 6,
-          "student_id": 1002,
-          "course_id": 101,
-          "assessment_type": "Final",
-          "score": 94.0
-        },
-        {
-          "assessment_id": 7,
-          "student_id": 1002,
-          "course_id": 105,
-          "assessment_type": "Midterm",
-          "score": 83.0
-        },
-        {
-          "assessment_id": 8,
-          "student_id": 1002,
-          "course_id": 105,
-          "assessment_type": "Final",
-          "score": 89.0
-        },
-        {
-          "assessment_id": 9,
-          "student_id": 1003,
-          "course_id": 103,
-          "assessment_type": "Midterm",
-          "score": 74.0
-        },
-        {
-          "assessment_id": 10,
-          "student_id": 1003,
-          "course_id": 103,
-          "assessment_type": "Final",
-          "score": 80.0
-        },
-        {
-          "assessment_id": 11,
-          "student_id": 1003,
-          "course_id": 102,
-          "assessment_type": "Midterm",
-          "score": 79.0
-        },
-        {
-          "assessment_id": 12,
-          "student_id": 1003,
-          "course_id": 102,
-          "assessment_type": "Final",
-          "score": 77.0
-        },
-        {
-          "assessment_id": 13,
-          "student_id": 1004,
-          "course_id": 104,
-          "assessment_type": "Midterm",
-          "score": 87.0
-        },
-        {
-          "assessment_id": 14,
-          "student_id": 1004,
-          "course_id": 104,
-          "assessment_type": "Final",
-          "score": 93.0
-        },
-        {
-          "assessment_id": 15,
-          "student_id": 1004,
-          "course_id": 105,
-          "assessment_type": "Midterm",
-          "score": 82.0
-        },
-        {
-          "assessment_id": 16,
-          "student_id": 1004,
-          "course_id": 105,
-          "assessment_type": "Final",
-          "score": 88.0
-        },
-        {
-          "assessment_id": 17,
-          "student_id": 1005,
-          "course_id": 101,
-          "assessment_type": "Midterm",
-          "score": 69.0
-        },
-        {
-          "assessment_id": 18,
-          "student_id": 1005,
-          "course_id": 101,
-          "assessment_type": "Final",
-          "score": 75.0
-        },
-        {
-          "assessment_id": 19,
-          "student_id": 1005,
-          "course_id": 102,
-          "assessment_type": "Midterm",
-          "score": 71.0
-        },
-        {
-          "assessment_id": 20,
-          "student_id": 1005,
-          "course_id": 102,
-          "assessment_type": "Final",
-          "score": 74.0
-        },
-        {
-          "assessment_id": 21,
-          "student_id": 1006,
-          "course_id": 103,
-          "assessment_type": "Midterm",
-          "score": 90.0
-        },
-        {
-          "assessment_id": 22,
-          "student_id": 1006,
-          "course_id": 103,
-          "assessment_type": "Final",
-          "score": 96.0
-        },
-        {
-          "assessment_id": 23,
-          "student_id": 1007,
-          "course_id": 104,
-          "assessment_type": "Midterm",
-          "score": 76.0
-        },
-        {
-          "assessment_id": 24,
-          "student_id": 1007,
-          "course_id": 104,
-          "assessment_type": "Final",
-          "score": 82.0
-        },
-        {
-          "assessment_id": 25,
-          "student_id": 1008,
-          "course_id": 105,
-          "assessment_type": "Midterm",
-          "score": 93.0
-        },
-        {
-          "assessment_id": 26,
-          "student_id": 1008,
-          "course_id": 105,
-          "assessment_type": "Final",
-          "score": 97.0
-        }
-      ]
-    }
+  "instructors": [
+    { "instructor_id": 1, "full_name": "Dr. Lina Nasser",   "department": "Computer Science",       "email": "lina.nasser@university.edu" },
+    { "instructor_id": 2, "full_name": "Dr. Youssef Karim", "department": "Information Technology", "email": "youssef.karim@university.edu" },
+    { "instructor_id": 3, "full_name": "Dr. Mariam Fadel",  "department": "Computer Science",       "email": "mariam.fadel@university.edu" },
+    { "instructor_id": 4, "full_name": "Dr. Tarek Mansour", "department": "Information Systems",    "email": "tarek.mansour@university.edu" },
+    { "instructor_id": 5, "full_name": "Dr. Huda Alwan",    "department": "Software Engineering",   "email": "huda.alwan@university.edu" }
+  ],
 
+  "students": [
+    { "student_id": 1050, "full_name": "Rami Haddad",  "gender": "Male",   "date_of_birth": "2002-08-23", "city": "Aden" },
+    { "student_id": 1051, "full_name": "Dina Salem",   "gender": "Female", "date_of_birth": "2003-06-12", "city": "Mukalla" },
+    { "student_id": 1052, "full_name": "Faris Qasim",  "gender": "Male",   "date_of_birth": "2004-03-05", "city": "Hodeidah" },
+    { "student_id": 1053, "full_name": "Layla Omar",   "gender": "Female", "date_of_birth": "2002-12-17", "city": "Taiz" },
+    { "student_id": 1054, "full_name": "Nabil Farouk", "gender": "Male",   "date_of_birth": "2003-10-29", "city": "Aden" },
+    { "student_id": 1055, "full_name": "Salma Jaber",  "gender": "Female", "date_of_birth": "2004-05-14", "city": "Ibb" },
+    { "student_id": 1056, "full_name": "Zaid Naji",    "gender": "Male",   "date_of_birth": "2003-02-08", "city": "Dhamar" },
+    { "student_id": 1057, "full_name": "Hana Yasin",   "gender": "Female", "date_of_birth": "2002-09-30", "city": "Sanaa" },
+    { "student_id": 1058, "full_name": "Omar Ba Wazir","gender": "Male",   "date_of_birth": "2003-07-19", "city": "Aden" },
+    { "student_id": 1059, "full_name": "Reem Al-Saqqaf","gender": "Female","date_of_birth": "2004-01-11", "city": "Sanaa" }
+  ],
+
+  "courses": [
+    { "course_id": 101, "course_name": "Software Engineering",     "credit_hours": 3, "instructor_id": 1 },
+    { "course_id": 102, "course_name": "Computer Networks",        "credit_hours": 3, "instructor_id": 2 },
+    { "course_id": 103, "course_name": "Operating Systems",        "credit_hours": 3, "instructor_id": 3 },
+    { "course_id": 104, "course_name": "Mobile Application Design","credit_hours": 3, "instructor_id": 4 },
+    { "course_id": 105, "course_name": "Machine Learning",         "credit_hours": 4, "instructor_id": 1 },
+    { "course_id": 106, "course_name": "Database Systems",         "credit_hours": 3, "instructor_id": 5 }
+  ],
+
+  "enrollments": [
+    { "enrollment_id": 1,  "student_id": 1050, "course_id": 101, "enrollment_date": "2026-02-02", "semester": "Spring 2026" },
+    { "enrollment_id": 2,  "student_id": 1050, "course_id": 102, "enrollment_date": "2026-02-02", "semester": "Spring 2026" },
+    { "enrollment_id": 3,  "student_id": 1051, "course_id": 101, "enrollment_date": "2026-02-03", "semester": "Spring 2026" },
+    { "enrollment_id": 4,  "student_id": 1051, "course_id": 105, "enrollment_date": "2026-02-03", "semester": "Spring 2026" },
+    { "enrollment_id": 5,  "student_id": 1052, "course_id": 103, "enrollment_date": "2026-02-04", "semester": "Spring 2026" },
+    { "enrollment_id": 6,  "student_id": 1052, "course_id": 102, "enrollment_date": "2026-02-04", "semester": "Spring 2026" },
+    { "enrollment_id": 7,  "student_id": 1053, "course_id": 104, "enrollment_date": "2026-02-05", "semester": "Spring 2026" },
+    { "enrollment_id": 8,  "student_id": 1053, "course_id": 105, "enrollment_date": "2026-02-05", "semester": "Spring 2026" },
+    { "enrollment_id": 9,  "student_id": 1054, "course_id": 101, "enrollment_date": "2026-02-06", "semester": "Spring 2026" },
+    { "enrollment_id": 10, "student_id": 1054, "course_id": 102, "enrollment_date": "2026-02-06", "semester": "Spring 2026" },
+    { "enrollment_id": 11, "student_id": 1055, "course_id": 103, "enrollment_date": "2026-02-07", "semester": "Spring 2026" },
+    { "enrollment_id": 12, "student_id": 1056, "course_id": 104, "enrollment_date": "2026-02-08", "semester": "Spring 2026" },
+    { "enrollment_id": 13, "student_id": 1057, "course_id": 105, "enrollment_date": "2026-02-08", "semester": "Spring 2026" },
+    { "enrollment_id": 14, "student_id": 1058, "course_id": 106, "enrollment_date": "2026-02-09", "semester": "Spring 2026" },
+    { "enrollment_id": 15, "student_id": 1059, "course_id": 106, "enrollment_date": "2026-02-10", "semester": "Spring 2026" }
+  ],
+
+  "assessments": [
+    { "assessment_id": 1,  "student_id": 1050, "course_id": 101, "assessment_type": "Midterm", "score": 78.0 },
+    { "assessment_id": 2,  "student_id": 1050, "course_id": 101, "assessment_type": "Final",   "score": 86.0 },
+    { "assessment_id": 3,  "student_id": 1050, "course_id": 102, "assessment_type": "Midterm", "score": 81.0 },
+    { "assessment_id": 4,  "student_id": 1050, "course_id": 102, "assessment_type": "Final",   "score": 88.0 },
+    { "assessment_id": 5,  "student_id": 1051, "course_id": 101, "assessment_type": "Midterm", "score": 91.0 },
+    { "assessment_id": 6,  "student_id": 1051, "course_id": 101, "assessment_type": "Final",   "score": 94.0 },
+    { "assessment_id": 7,  "student_id": 1051, "course_id": 105, "assessment_type": "Midterm", "score": 83.0 },
+    { "assessment_id": 8,  "student_id": 1051, "course_id": 105, "assessment_type": "Final",   "score": 89.0 },
+    { "assessment_id": 9,  "student_id": 1052, "course_id": 103, "assessment_type": "Midterm", "score": 74.0 },
+    { "assessment_id": 10, "student_id": 1052, "course_id": 103, "assessment_type": "Final",   "score": 80.0 },
+    { "assessment_id": 11, "student_id": 1052, "course_id": 102, "assessment_type": "Midterm", "score": 79.0 },
+    { "assessment_id": 12, "student_id": 1052, "course_id": 102, "assessment_type": "Final",   "score": 77.0 },
+    { "assessment_id": 13, "student_id": 1053, "course_id": 104, "assessment_type": "Midterm", "score": 87.0 },
+    { "assessment_id": 14, "student_id": 1053, "course_id": 104, "assessment_type": "Final",   "score": 93.0 },
+    { "assessment_id": 15, "student_id": 1053, "course_id": 105, "assessment_type": "Midterm", "score": 82.0 },
+    { "assessment_id": 16, "student_id": 1053, "course_id": 105, "assessment_type": "Final",   "score": 88.0 },
+    { "assessment_id": 17, "student_id": 1054, "course_id": 101, "assessment_type": "Midterm", "score": 69.0 },
+    { "assessment_id": 18, "student_id": 1054, "course_id": 101, "assessment_type": "Final",   "score": 75.0 },
+    { "assessment_id": 19, "student_id": 1054, "course_id": 102, "assessment_type": "Midterm", "score": 71.0 },
+    { "assessment_id": 20, "student_id": 1054, "course_id": 102, "assessment_type": "Final",   "score": 74.0 },
+    { "assessment_id": 21, "student_id": 1055, "course_id": 103, "assessment_type": "Midterm", "score": 90.0 },
+    { "assessment_id": 22, "student_id": 1055, "course_id": 103, "assessment_type": "Final",   "score": 96.0 },
+    { "assessment_id": 23, "student_id": 1056, "course_id": 104, "assessment_type": "Midterm", "score": 76.0 },
+    { "assessment_id": 24, "student_id": 1056, "course_id": 104, "assessment_type": "Final",   "score": 82.0 },
+    { "assessment_id": 25, "student_id": 1057, "course_id": 105, "assessment_type": "Midterm", "score": 93.0 },
+    { "assessment_id": 26, "student_id": 1057, "course_id": 105, "assessment_type": "Final",   "score": 97.0 },
+    { "assessment_id": 27, "student_id": 1058, "course_id": 106, "assessment_type": "Midterm", "score": 84.0 },
+    { "assessment_id": 28, "student_id": 1058, "course_id": 106, "assessment_type": "Final",   "score": 90.0 },
+    { "assessment_id": 29, "student_id": 1059, "course_id": 106, "assessment_type": "Midterm", "score": 88.0 },
+    { "assessment_id": 30, "student_id": 1059, "course_id": 106, "assessment_type": "Final",   "score": 92.0 }
+  ]
+}
